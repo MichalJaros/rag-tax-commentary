@@ -1,4 +1,4 @@
-# English version below
+[English version below](#english-version-below)
 
 # Projekt RAG (Retriever-Augmented Generation)
 **rag-tax-commentary**  
@@ -105,7 +105,7 @@ Projekt udostępniony jest na licencji otwartej. Osoby zainteresowane wspólnym 
 - LinkedIn: [michał-jaros-88572821a](https://www.linkedin.com/in/michał-jaros-88572821a/)  
 - E-mail: michal.marek.jaros@gmail.com  
 
-
+## English version below
 # RAG Project (Retriever-Augmented Generation)
 **rag-tax-commentary**  
 A Retrieval-Augmented Generation system for automatically creating tax commentaries based on individual rulings, leveraging the Bielik LLM and the Weaviate vector database.

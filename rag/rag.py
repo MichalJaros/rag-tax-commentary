@@ -1,5 +1,6 @@
 import requests
 import weaviate
+import argparse
 
 # Import ready-made functions from ingest_data.py
 from ingest_data import get_embedding_cached, TOKENIZER, COLLECTION_NAME, WEAVIATE_HOST, WEAVIATE_PORT
@@ -45,22 +46,18 @@ def build_messages(user_q: str, retrieved):
     return msgs
 
 def query_bielik(messages):
-    """
-    Wywołujemy Bielika czystym HTTP POST-em, pomijając OpenAI-Python client,
-    żeby mieć pełną kontrolę nad URL-em i nagłówkami.
-    """
     payload = {
         "model": BIELIK_MODEL,
         "messages": messages,
         "temperature": 0.2,
         "top_p": 0.95,
-        "max_tokens": 4096,
+        "max_tokens": 32768,
         "stop": None
     }
     resp = requests.post(
-         f"{BIELIK_SERVER_URL}/v1/chat/completions",  # dokładny adres Twojego Serwera
+         f"{BIELIK_SERVER_URL}/v1/chat/completions", 
         json=payload,
-        headers={"Content-Type": "application/json"}  # brak Authorization
+        headers={"Content-Type": "application/json"}
     )
     print(f"[DEBUG] Bielik status_code: {resp.status_code}")  # DEBUG
     print(f"[DEBUG] Bielik raw response: {resp.text}")       # DEBUG

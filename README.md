@@ -62,7 +62,7 @@ W przykładzie w pytaniu użyto słowa „pensja”, aby sprawdzić, czy wyszuki
 Ze względu na ograniczenia dotyczące rozmiaru plików na GitHubie, w repozytorium nie zamieszczono wektorowej bazy danych ani pliku CSV z surowymi tekstami interpretacji.
 
 Repozytorium składa się z następujących elementów:
-  ├── bielik_aws_deploy/
+	├── bielik_aws_deploy/
   │ ├── Requirements.txt
   │ ├── Run_bielik.sh
   │ └── Server.py

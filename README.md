@@ -73,7 +73,6 @@ Repozytorium składa się z następujących elementów:
 │ ├── dockerfiles/
 │ │ ├── Run_embedding_model.sh
 │ │ └── Run_vector_db.sh
-│ │
 │ ├── Ingest_data.py
 │ ├── rag.py
 │ └── Requirements.txt

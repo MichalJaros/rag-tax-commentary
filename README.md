@@ -116,7 +116,7 @@ repo_root/
 │   ├── config.py
 │   ├── retrieval_report.md
 │   └── retrieval_stats_summary.md
-│├── images/
+├── images/
 │   └── image1.png
 └── README.md
 ```
@@ -245,7 +245,7 @@ repo_root/
 │   ├── config.py
 │   ├── retrieval_report.md
 │   └── retrieval_stats_summary.md
-│├── images/
+├── images/
 │   └── image1.png
 └── README.md
 ```

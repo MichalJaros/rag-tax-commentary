@@ -26,10 +26,10 @@ Celem projektu jest stworzenie narzędzia, które na podstawie interpretacji pod
 ## Technologie
 
 - **Python 3.12+**
-- **[LangChain](https://python.langchain.com/)** — framework do budowy pipeline’ów RAG, zarządzania przepływem danych (retriever, LLM, monitoring, analizy)
-- **[Weaviate](https://weaviate.io/)** — baza danych wektorowych (przechowuje zakodowane fragmenty interpretacji, umożliwia wyszukiwanie semantyczne)
-- **[HuggingFace Transformers](https://huggingface.co/docs/transformers/)** — embeddingi tekstów do przestrzeni wektorowej
-- **Bielik LLM** — polskojęzyczny model generatywny (REST API)
+- **LangChain** — framework do budowy pipeline’ów RAG, zarządzania przepływem danych (retriever, LLM, monitoring, analizy)
+- **Weaviate** — baza danych wektorowych (przechowuje zakodowane fragmenty interpretacji, umożliwia wyszukiwanie semantyczne)
+- **HuggingFace Transformers** — embeddingi tekstów do przestrzeni wektorowej
+- **Bielik LLM** — polskojęzyczny model generatywny
 - **pandas** — przetwarzanie i czyszczenie danych
 - **numpy** — operacje matematyczne/statystyczne
 - **matplotlib** — generowanie wykresów (histogramy, itp.)
@@ -155,10 +155,10 @@ The aim of this project is to create a tool that, based on tax interpretations, 
 ## Technologies
 
 - **Python 3.12+**
-- **[LangChain](https://python.langchain.com/)** — framework for building RAG pipelines, managing data flow (retriever, LLM, monitoring, analytics)
-- **[Weaviate](https://weaviate.io/)** — vector database (stores encoded document fragments, enables semantic search)
-- **[HuggingFace Transformers](https://huggingface.co/docs/transformers/)** — for text embeddings into vector space
-- **Bielik LLM** — Polish-language generative model (REST API)
+- **LangChain** — framework for building RAG pipelines, managing data flow (retriever, LLM, monitoring, analytics)
+- **Weaviate** — vector database (stores encoded document fragments, enables semantic search)
+- **HuggingFace Transformers** — for text embeddings into vector space
+- **Bielik LLM** — Polish-language generative model 
 - **pandas** — data processing and cleaning
 - **numpy** — mathematical/statistical operations
 - **matplotlib** — generating plots (histograms, etc.)

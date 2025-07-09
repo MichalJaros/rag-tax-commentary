@@ -1,108 +1,133 @@
 [English version below](#english-version-below)
 
 # Projekt RAG (Retriever-Augmented Generation)
-**rag-tax-commentary**  
-Retrieval-Augmented Generation system do automatycznego tworzenia komentarzy podatkowych na bazie interpretacji indywidualnych, wykorzystujący model Bielik LLM oraz bazę wektorową Weaviate.
+**rag-tax-commentary**
+
+Zaawansowany system Retrieval-Augmented Generation do automatycznego generowania komentarzy podatkowych na podstawie interpretacji indywidualnych, wykorzystujący **LangChain**, model **Bielik LLM** oraz bazę wektorową **Weaviate**.
+
+---
 
 ## Spis treści
 - [Cel projektu](#cel-projektu)
 - [Technologie](#technologie)
 - [Przykład użycia](#przykład-użycia)
+- [Automatyczna analiza statystyk i raportowanie](#automatyczna-analiza-statystyk-i-raportowanie)
 - [Struktura repozytorium](#struktura-repozytorium)
 - [Kontakt](#kontakt)
 
+---
+
 ## Cel projektu
-Celem projektu jest stworzenie narzędzia, które na podstawie interpretacji podatkowych w przystępny sposób odpowie na pytania dotyczące prawa podatkowego. Organy podatkowe wydały ponad pół miliona interpretacji indywidualnych, w których wyjaśniały wykładnię przepisów. Odnalezienie interpretacji zawierających kluczowe informacje bywa czasochłonne, dlatego istnieje przestrzeń dla systemów przyspieszających ten proces oraz generujących zwięzłe podsumowania jasno odpowiadające na pytanie użytkownika.
+
+Celem projektu jest stworzenie narzędzia, które na podstawie interpretacji podatkowych potrafi w zrozumiały sposób odpowiadać na pytania dotyczące prawa podatkowego. System automatycznie wyszukuje najtrafniejsze fragmenty interpretacji (retrieval), a następnie generuje precyzyjne komentarze podatkowe z użyciem dużego modelu językowego (Bielik LLM). Pipeline korzysta z nowoczesnych frameworków **LangChain** oraz **Weaviate**.
+
+---
 
 ## Technologie
-- **Python 3.12.3**  
-  Główne środowisko wykonawcze i język programowania.
-- **requests**  
-  Wysyłanie zapytań HTTP (pobieranie danych, komunikacja z API).
-- **weaviate**  
-  Klient do bazy wektorowej Weaviate (indeksowanie dokumentów, wyszukiwanie semantyczne).
-- **pandas**  
-  Manipulacja i analiza danych w formie DataFrame (wczytywanie i oczyszczanie danych źródłowych).
-- **re (Regular Expressions)**  
-  Zaawansowane operacje na tekście (parsowanie, czyszczenie).
-- **transformers (AutoTokenizer)**  
-  Tokenizacja tekstu przed inferencją modeli językowych.
-- **litserve**  
-  Serwowanie modelu LLM poprzez endpointy REST, ułatwiające integrację z frontendem.
-- **vllm (LLM, SamplingParams)**  
-  Wydajna inferencja modeli językowych (równoległe przetwarzanie zapytań, konfiguracja parametrów generowania).
 
-Dzięki temu zestawowi narzędzi aplikacja RAG składa się z trzech głównych warstw:
-1. **Moduł Retrievera**  
-   - Indeksowanie i wyszukiwanie informacji w Weaviate  
-   - Preprocessing danych w Pandas  
-   - Caching wyników zapytań
-2. **Moduł Generatywny**  
-   - Tokenizacja w Transformers  
-   - Wydajna inferencja w VLLM  
-   - Wysyłanie zapytań do lokalnego modelu Bielik lub do API OpenAI
-3. **Warstwa Serwowania**  
-   - Litserve do wystawienia API HTTP i obsługi żądań użytkowników
+- **Python 3.12+**
+- **[LangChain](https://python.langchain.com/)** — framework do budowy pipeline’ów RAG, zarządzania przepływem danych (retriever, LLM, monitoring, analizy)
+- **[Weaviate](https://weaviate.io/)** — baza danych wektorowych (przechowuje zakodowane fragmenty interpretacji, umożliwia wyszukiwanie semantyczne)
+- **[HuggingFace Transformers](https://huggingface.co/docs/transformers/)** — embeddingi tekstów do przestrzeni wektorowej
+- **Bielik LLM** — polskojęzyczny model generatywny (REST API)
+- **pandas** — przetwarzanie i czyszczenie danych
+- **numpy** — operacje matematyczne/statystyczne
+- **matplotlib** — generowanie wykresów (histogramy, itp.)
+- **requests** — komunikacja HTTP z serwerem Bielik
+- **re** — zaawansowane operacje tekstowe (regex)
+- **dotenv** — obsługa zmiennych środowiskowych
+- **Docker** — uruchamianie serwera embeddingowego i bazy Weaviate
 
-Każda z wymienionych bibliotek pełni określoną rolę w architekturze projektu, co pozwala na skalowalny i elastyczny pipeline RAG.
+**Pliki:**
+- [csv_document_loader.py](Rag/csv_document_loader.py) — ładowanie i chunkowanie danych CSV
+- [weaviate_ingest.py](Rag/weaviate_ingest.py) — indeksowanie dokumentów, zarządzanie schematem i połączenie z bazą Weaviate
+- [retriever.py](Rag/retriever.py) — retriever oparty na LangChain (wyszukiwanie najbardziej relewantnych fragmentów)
+- [llms.py](Rag/llms.py) — komunikacja i budowa promptów dla Bielik LLM
+- [pipeline.py](Rag/pipeline.py) — główny pipeline RAG (terminal)
+- [generate_stats.py](Rag/generate_stats.py) — automatyczna analiza, zbieranie statystyk i generowanie raportów/wykresów na podstawie realnych pytań
+
+---
 
 ## Przykład użycia
-W wyniku prac powstał prototyp zawierający około 4500 interpretacji indywidualnych. Obecna wersja nie posiada interfejsu webowego; pytania należy zadawać w terminalu.
 
-1. Użytkownik wpisuje pytanie (np. o konkretną kwestię podatkową).  
-   ![Wpisywanie pytania w terminalu](images/image1.png)
+Prototyp systemu obejmuje ~4500 interpretacji podatkowych.  
+Obecna wersja **nie posiada interfejsu webowego** – pytania zadawane są w terminalu.
 
-2. System za pomocą wyszukiwania wektorowego odnajduje fragmenty interpretacji, które odpowiadają na zadane pytanie.  
-   ![Wyszukiwanie odpowiednich fragmentów w bazie Weaviate](images/image2.png)
+1. **Uruchom wymagane serwery** (Weaviate, Bielik LLM, embedding server) – zgodnie z dokumentacją lub dockerami.
+2. **Dodaj dane (CSV)** i zaindeksuj je do bazy Weaviate (jeśli nie masz jeszcze bazy).
+3. **Zadaj pytanie w terminalu** (przykład):
 
-3. Zadane pytanie oraz wybrane fragmenty interpretacji trafiają do promptu i są przesyłane do modelu Bielik. Duży model językowy generuje jasną i zwięzłą odpowiedź.  
-   ![Generowanie odpowiedzi przez model Bielik](images/image3.png)
+    ```bash
+    python pipeline.py -q "Czy można zaliczyć pensje inżynierów do ulgi na działalność badawczo-rozwojową?"
+    ```
+  (images/image1.png)
+    Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_log.csv`).
 
-W przykładzie w pytaniu użyto słowa „pensja”, aby sprawdzić, czy wyszukiwanie wektorowe poprawnie skojarzy je z terminem „wynagrodzenie”, stosowanym w ustawie oraz interpretacjach indywidualnych.
+4. **Po zadaniu serii pytań** możesz wygenerować statystyki, ranking chunków i automatyczne raporty do README:
+
+    ```bash
+    python generate_stats.py
+    ```
+
+    W katalogu pojawią się m.in.: `retrieval_report.md`, `chunk_ranking.csv`, `chunk_length_hist.png`, `retrieval_stats_summary.md`.
+
+---
+
+## Automatyczna analiza statystyk i raportowanie
+
+- **System loguje każde pytanie i odpowiedź** do pliku `qa_history_log.csv`
+- **[generate_stats.py](Rag/generate_stats.py)** analizuje rzeczywistą historię zapytań:
+    - Liczbę i długość chunków
+    - Ranking najczęściej przywoływanych fragmentów
+    - Czasy odpowiedzi
+    - Histogramy, rozkład embeddingów, itp.
+    - Gotowe raporty Markdown do README lub prezentacji
+
+**Przykładowe raporty/statystyki znajdziesz w plikach:**
+- [retrieval_report.md](Rag/retrieval_report.md)
+- [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
+- [chunk_ranking.csv](Rag/chunk_ranking.csv)
+- (oraz obrazy PNG z wykresami)
+
+---
 
 ## Struktura repozytorium
-Ze względu na ograniczenia dotyczące rozmiaru plików na GitHubie, w repozytorium nie zamieszczono wektorowej bazy danych ani pliku CSV z surowymi tekstami interpretacji.
 
-Repozytorium składa się z następujących elementów:
+Ze względu na ograniczenia dotyczące rozmiaru plików na GitHub, repozytorium nie zawiera bazy wektorowej ani pliku CSV z tekstami interpretacji.
 ```
-├── bielik_aws_deploy/
-│ ├── Requirements.txt
-│ ├── Run_bielik.sh
-│ └── Server.py
-├── Rag/
-│ ├── dockerfiles/
-│ │ ├── Run_embedding_model.sh
-│ │ └── Run_vector_db.sh
-│ ├── Ingest_data.py
-│ ├── rag.py
-│ └── Requirements.txt
-└── images/
-├── image1.png
-├── image2.png
-└── image3.png
+repo_root/
+│
+├── [bielik_aws_deploy/](bielik_aws_deploy/)
+│   ├── [Requirements.txt](bielik_aws_deploy/Requirements.txt)
+│   ├── [Run_bielik.sh](bielik_aws_deploy/Run_bielik.sh)
+│   └── [Server.py](bielik_aws_deploy/Server.py)
+│
+├── [Rag/](Rag/)
+│   ├── [dockerfiles/](Rag/dockerfiles/)
+│   │   ├── [Run_embedding_model.sh](Rag/dockerfiles/Run_embedding_model.sh)
+│   │   └── [Run_vector_db.sh](Rag/dockerfiles/Run_vector_db.sh)
+│   ├── [csv_document_loader.py](Rag/csv_document_loader.py)
+│   ├── [weaviate_ingest.py](Rag/weaviate_ingest.py)
+│   ├── [retriever.py](Rag/retriever.py)
+│   ├── [llms.py](Rag/llms.py)
+│   ├── [pipeline.py](Rag/pipeline.py)
+│   ├── [generate_stats.py](Rag/generate_stats.py)
+│   ├── [config.py](Rag/config.py)
+│   ├── [retrieval_report.md](Rag/ retrieval_report.md)
+│   └── [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
+│├── [images/](images/)
+│   ├── [image1.png](images/image1.png)
+│   ├── [image2.png](images/image2.png)
+│   ├── [image3.png](images/image3.png)
+│
+└── [README.md](README.md)---
 ```
-- **bielik_aws_deploy/**  
-  Zawiera pliki potrzebne do uruchomienia modelu Bielik na instancji AWS EC2:
-  - `Requirements.txt` – lista zależności Pythona do uruchomienia serwera Bielik.  
-  - `Run_bielik.sh` – skrypt Docker do uruchamiania serwera i zbierania logów.  
-  - `Server.py` – kod serwera wystawiającego endpointy do inferencji modelu Bielik.
-
-- **Rag/**  
-  Implementacja pipeline RAG:
-  - `dockerfiles/`  
-    - `Run_embedding_model.sh` – skrypt Docker do uruchamiania modelu embeddingowego (silver-retriever-base-v1).  
-    - `Run_vector_db.sh` – skrypt Docker do uruchamiania bazy wektorowej Weaviate.  
-  - `Ingest_data.py` – skrypt Pythona tworzący wektorową bazę danych, modyfikujący tekst interpretacji, przeprowadzający chunking i tokenizację. W kodzie wykorzystano wiedzę dziedzinową, aby np. „art. 18d ust. 1 pkt 1” był traktowany jako pojedynczy token – skrypt usuwa zbędne spacje, dzięki czemu odniesienia do konkretnych przepisów mają dokładniejsze reprezentacje.  
-  - `rag.py` – główny skrypt Pythona uruchamiający pełny pipeline RAG: definiuje prompt systemowy, pobiera informacje z bazy wektorowej, ustala hiperparametry LLM-u i wysyła zapytanie do serwera z modelem Bielik.  
-  - `Requirements.txt` – lista zależności Pythona dla modułu RAG.
-
-- **images/**  
-  Katalog z plikami graficznymi używanymi w sekcji „Przykład użycia”.
-
 ## Kontakt
-Projekt udostępniony jest na licencji otwartej. Osoby zainteresowane wspólnym rozwojem narzędzia do usystematyzowanego przeglądu przepisów podatkowych zapraszam do kontaktu:  
-- LinkedIn: [michał-jaros-88572821a](https://www.linkedin.com/in/michał-jaros-88572821a/)  
-- E-mail: michal.marek.jaros@gmail.com  
+
+Projekt na licencji otwartej.  
+Zapraszam do współpracy:  
+- [LinkedIn: Michał Jaros](https://www.linkedin.com/in/michał-jaros-88572821a/)  
+- E-mail: michal.marek.jaros@gmail.com
 
 ## English version below
 # RAG Project (Retriever-Augmented Generation)

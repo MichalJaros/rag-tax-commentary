@@ -127,7 +127,7 @@ Zapraszam do współpracy:
 - [LinkedIn: Michał Jaros](https://www.linkedin.com/in/michał-jaros-88572821a/)  
 - E-mail: michal.marek.jaros@gmail.com
 
-[English version below](#english-version-below)
+## English version below
 
 # RAG Project (Retriever-Augmented Generation)
 **rag-tax-commentary**
@@ -168,12 +168,12 @@ The aim of this project is to create a tool that, based on tax interpretations, 
 - **Docker** — for running the embedding server and Weaviate database
 
 **Files:**
-- [csv_document_loader.py](Rag/csv_document_loader.py) — CSV data loading and chunking
-- [weaviate_ingest.py](Rag/weaviate_ingest.py) — document indexing, schema management, and Weaviate connection
-- [retriever.py](Rag/retriever.py) — LangChain-based retriever (searching for most relevant fragments)
-- [llms.py](Rag/llms.py) — prompt building and Bielik LLM communication
-- [pipeline.py](Rag/pipeline.py) — main RAG pipeline (terminal)
-- [generate_stats.py](Rag/generate_stats.py) — automatic analysis, statistics gathering, and report/plot generation based on real user questions
+- [csv_document_loader.py](rag/csv_document_loader.py) — CSV data loading and chunking
+- [weaviate_ingest.py](rag/weaviate_ingest.py) — document indexing, schema management, and Weaviate connection
+- [retriever.py](rag/retriever.py) — LangChain-based retriever (searching for most relevant fragments)
+- [llms.py](rag/llms.py) — prompt building and Bielik LLM communication
+- [pipeline.py](rag/pipeline.py) — main RAG pipeline (terminal)
+- [generate_stats.py](rag/generate_stats.py) — automatic analysis, statistics gathering, and report/plot generation based on real user questions
 
 ---
 
@@ -207,7 +207,7 @@ The answer will appear in the terminal and will also be saved to the log (`qa_hi
 ## Automatic Statistics Analysis and Reporting
 
 - **The system logs every question and answer** to `qa_history_log.csv`
-- **[generate_stats.py](Rag/generate_stats.py)** analyzes the actual query history:
+- **[generate_stats.py](rag/generate_stats.py)** analyzes the actual query history:
     - Number and length of chunks
     - Ranking of the most frequently retrieved fragments
     - Response times
@@ -215,9 +215,9 @@ The answer will appear in the terminal and will also be saved to the log (`qa_hi
     - Ready-made Markdown reports for the README or presentations
 
 **Sample reports/statistics can be found in:**
-- [retrieval_report.md](Rag/retrieval_report.md)
-- [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
-- [chunk_ranking.csv](Rag/chunk_ranking.csv)
+- [retrieval_report.md](rag/retrieval_report.md)
+- [retrieval_stats_summary.md](rag/retrieval_stats_summary.md)
+- [chunk_ranking.csv](rag/chunk_ranking.csv)
 
 ---
 

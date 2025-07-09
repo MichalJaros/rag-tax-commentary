@@ -89,40 +89,36 @@ Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_l
 - [retrieval_report.md](rag/retrieval_report.md)
 - [retrieval_stats_summary.md](rag/retrieval_stats_summary.md)
 - [chunk_ranking.csv](rRg/chunk_ranking.csv)
-- (oraz obrazy PNG z wykresami)
 
 ---
 
 ## Struktura repozytorium
 
 Ze względu na ograniczenia dotyczące rozmiaru plików na GitHub, repozytorium nie zawiera bazy wektorowej ani pliku CSV z tekstami interpretacji.
+
 ```
 repo_root/
 │
-├── [bielik_aws_deploy/](bielik_aws_deploy/)
-│   ├── [Requirements.txt](bielik_aws_deploy/Requirements.txt)
-│   ├── [Run_bielik.sh](bielik_aws_deploy/Run_bielik.sh)
-│   └── [Server.py](bielik_aws_deploy/Server.py)
+├── bielik_aws_deploy/
+│   ├── Requirements.txt
+│   ├── Run_bielik.sh
+│   └── Server.py
 │
-├── [Rag/](Rag/)
-│   ├── [dockerfiles/](Rag/dockerfiles/)
-│   │   ├── [Run_embedding_model.sh](Rag/dockerfiles/Run_embedding_model.sh)
-│   │   └── [Run_vector_db.sh](Rag/dockerfiles/Run_vector_db.sh)
-│   ├── [csv_document_loader.py](Rag/csv_document_loader.py)
-│   ├── [weaviate_ingest.py](Rag/weaviate_ingest.py)
-│   ├── [retriever.py](Rag/retriever.py)
-│   ├── [llms.py](Rag/llms.py)
-│   ├── [pipeline.py](Rag/pipeline.py)
-│   ├── [generate_stats.py](Rag/generate_stats.py)
-│   ├── [config.py](Rag/config.py)
-│   ├── [retrieval_report.md](Rag/ retrieval_report.md)
-│   └── [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
-│├── [images/](images/)
-│   ├── [image1.png](images/image1.png)
-│   ├── [image2.png](images/image2.png)
-│   ├── [image3.png](images/image3.png)
-│
-└── [README.md](README.md)---
+├── Rag/
+│   ├── dockerfiles/
+│   │   └── Run_vector_db.sh
+│   ├── csv_document_loader.py
+│   ├── weaviate_ingest.py
+│   ├── retriever.py
+│   ├── llms.py
+│   ├── pipeline.py
+│   ├── generate_stats.py
+│   ├── config.py
+│   ├── retrieval_report.md
+│   └── retrieval_stats_summary.md
+│├── images/
+│   └── image1.png
+└── README.md
 ```
 ## Kontakt
 
@@ -131,109 +127,133 @@ Zapraszam do współpracy:
 - [LinkedIn: Michał Jaros](https://www.linkedin.com/in/michał-jaros-88572821a/)  
 - E-mail: michal.marek.jaros@gmail.com
 
-## English version below
+[English version below](#english-version-below)
+
 # RAG Project (Retriever-Augmented Generation)
-**rag-tax-commentary**  
-A Retrieval-Augmented Generation system for automatically creating tax commentaries based on individual rulings, leveraging the Bielik LLM and the Weaviate vector database.
+**rag-tax-commentary**
+
+An advanced Retrieval-Augmented Generation system for automatic tax commentary generation based on individual tax rulings, utilizing **LangChain**, the **Bielik LLM** model, and the **Weaviate** vector database.
+
+---
 
 ## Table of Contents
-- [Project Aim](#project-aim)
+- [Project Goal](#project-goal)
 - [Technologies](#technologies)
 - [Usage Example](#usage-example)
+- [Automatic Statistics Analysis and Reporting](#automatic-statistics-analysis-and-reporting)
 - [Repository Structure](#repository-structure)
 - [Contact](#contact)
 
-## Project Aim
-The aim of this project is to create a tool that, based on tax rulings, provides accessible answers to questions about tax law. Tax authorities have issued over half a million individual rulings explaining the interpretation of regulations. Finding rulings that contain key information can be time-consuming, so there is room for systems that speed up this process and generate concise summaries that clearly address the user’s question.
+---
+
+## Project Goal
+
+The aim of this project is to create a tool that, based on tax interpretations, can answer questions regarding tax law in an understandable way. The system automatically retrieves the most relevant fragments (retrieval) and then generates precise tax commentaries using a large language model (Bielik LLM). The pipeline uses modern frameworks such as **LangChain** and **Weaviate**.
+
+---
 
 ## Technologies
-- **Python 3.12.3**  
-  The primary runtime environment and programming language.
-- **requests**  
-  Sending HTTP requests (data retrieval, API communication).
-- **weaviate**  
-  Client for the Weaviate vector database (document indexing, semantic search).
-- **pandas**  
-  DataFrame-based data manipulation and analysis (loading and cleaning source data).
-- **re (Regular Expressions)**  
-  Advanced text operations (parsing, cleaning).
-- **transformers (AutoTokenizer)**  
-  Text tokenization before language model inference.
-- **litserve**  
-  Serving the LLM via REST endpoints, enabling easy frontend integration.
-- **vllm (LLM, SamplingParams)**  
-  Efficient language model inference (parallel request processing, generation parameter configuration).
 
-With this toolset, the RAG application consists of three main layers:
-1. **Retriever Module**  
-   - Indexing and searching information in Weaviate  
-   - Data preprocessing in Pandas  
-   - Caching query results
-2. **Generative Module**  
-   - Tokenization in Transformers  
-   - Efficient inference in VLLM  
-   - Sending queries to the local Bielik model or the OpenAI API
-3. **Serving Layer**  
-   - Litserve to expose an HTTP API and handle user requests
+- **Python 3.12+**
+- **[LangChain](https://python.langchain.com/)** — framework for building RAG pipelines, managing data flow (retriever, LLM, monitoring, analytics)
+- **[Weaviate](https://weaviate.io/)** — vector database (stores encoded document fragments, enables semantic search)
+- **[HuggingFace Transformers](https://huggingface.co/docs/transformers/)** — for text embeddings into vector space
+- **Bielik LLM** — Polish-language generative model (REST API)
+- **pandas** — data processing and cleaning
+- **numpy** — mathematical/statistical operations
+- **matplotlib** — generating plots (histograms, etc.)
+- **requests** — HTTP communication with Bielik server
+- **re** — advanced text operations (regex)
+- **dotenv** — environment variable handling
+- **Docker** — for running the embedding server and Weaviate database
 
-Each of these libraries plays a specific role in the project architecture, allowing for a scalable and flexible RAG pipeline.
+**Files:**
+- [csv_document_loader.py](Rag/csv_document_loader.py) — CSV data loading and chunking
+- [weaviate_ingest.py](Rag/weaviate_ingest.py) — document indexing, schema management, and Weaviate connection
+- [retriever.py](Rag/retriever.py) — LangChain-based retriever (searching for most relevant fragments)
+- [llms.py](Rag/llms.py) — prompt building and Bielik LLM communication
+- [pipeline.py](Rag/pipeline.py) — main RAG pipeline (terminal)
+- [generate_stats.py](Rag/generate_stats.py) — automatic analysis, statistics gathering, and report/plot generation based on real user questions
+
+---
 
 ## Usage Example
-The work resulted in a prototype containing about 4,500 individual rulings. The current version does not have a web interface; questions must be asked in the terminal.
 
-1. The user types a question (e.g., about a specific tax issue).  
-   ![Typing a question in the terminal](images/image1.png)
+The system prototype includes ~4500 tax rulings.  
+The current version **does not have a web interface** – questions are asked in the terminal.
 
-2. Using vector search, the system finds ruling fragments that match the submitted question.  
-   ![Searching for relevant fragments in the Weaviate database](images/image2.png)
+1. **Start the required servers** (Weaviate, Bielik LLM, embedding server) — as described in documentation or Docker scripts.
+2. **Add data (CSV)** and index it into Weaviate (if you do not have a vector DB yet).
+3. **Ask a question in the terminal** (example):
 
-3. The submitted question and the selected ruling fragments are added to the prompt and sent to the Bielik model. The large language model generates a clear and concise answer.  
-   ![Generating an answer with the Bielik model](images/image3.png)
+    ```bash
+    python pipeline.py -q "Can engineer salaries be included in the R&D tax relief?"
+    ```
 
-In this example, the word “pensja” (salary) was used in the question to check whether the vector search correctly associates it with the term “wynagrodzenie” (remuneration), which is used in the law and individual rulings.
+![Example](images/image1.png)
+
+The answer will appear in the terminal and will also be saved to the log (`qa_history_log.csv`).
+
+4. **After asking a series of questions**, you can generate statistics, chunk rankings, and automatic reports for the README:
+
+    ```bash
+    python generate_stats.py
+    ```
+
+    The following files will appear in the directory: `retrieval_report.md`, `chunk_ranking.csv`, `chunk_length_hist.png`, `retrieval_stats_summary.md`, etc.
+
+---
+
+## Automatic Statistics Analysis and Reporting
+
+- **The system logs every question and answer** to `qa_history_log.csv`
+- **[generate_stats.py](Rag/generate_stats.py)** analyzes the actual query history:
+    - Number and length of chunks
+    - Ranking of the most frequently retrieved fragments
+    - Response times
+    - Histograms, embedding distribution, etc.
+    - Ready-made Markdown reports for the README or presentations
+
+**Sample reports/statistics can be found in:**
+- [retrieval_report.md](Rag/retrieval_report.md)
+- [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
+- [chunk_ranking.csv](Rag/chunk_ranking.csv)
+
+---
 
 ## Repository Structure
-Due to GitHub file size restrictions, the vector database and the CSV file with raw ruling texts are not included in the repository.
 
-The repository consists of the following elements:
+Due to GitHub's file size limitations, the repository does **not** include the vector database or the CSV file with raw text interpretations.
+
 ```
+repo_root/
+│
 ├── bielik_aws_deploy/
-│ ├── Requirements.txt
-│ ├── Run_bielik.sh
-│ └── Server.py
+│   ├── Requirements.txt
+│   ├── Run_bielik.sh
+│   └── Server.py
+│
 ├── Rag/
-│ ├── dockerfiles/
-│ │ ├── Run_embedding_model.sh
-│ │ └── Run_vector_db.sh
-│ │
-│ ├── Ingest_data.py
-│ ├── rag.py
-│ └── Requirements.txt
-└── images/
-├── image1.png
-├── image2.png
-└── image3.png
+│   ├── dockerfiles/
+│   │   └── Run_vector_db.sh
+│   ├── csv_document_loader.py
+│   ├── weaviate_ingest.py
+│   ├── retriever.py
+│   ├── llms.py
+│   ├── pipeline.py
+│   ├── generate_stats.py
+│   ├── config.py
+│   ├── retrieval_report.md
+│   └── retrieval_stats_summary.md
+│├── images/
+│   └── image1.png
+└── README.md
 ```
-- **bielik_aws_deploy/**  
-  Contains files needed to deploy the Bielik model on an AWS EC2 instance:  
-  - `Requirements.txt` – list of Python dependencies to run the Bielik server.  
-  - `Run_bielik.sh` – Docker script to start the server and collect logs.  
-  - `Server.py` – server code exposing endpoints for Bielik model inference.
-
-- **Rag/**  
-  Implementation of the RAG pipeline:  
-  - `dockerfiles/`  
-    - `Run_embedding_model.sh` – Docker script to start the embedding model (silver-retriever-base-v1).  
-    - `Run_vector_db.sh` – Docker script to start the Weaviate vector database.  
-  - `Ingest_data.py` – Python script that builds the vector database, processes ruling text, performs chunking and tokenization. The script uses domain knowledge to treat references like “art. 18d ust. 1 pkt 1” as a single token—by removing unnecessary spaces, legal references have more accurate representations.  
-  - `rag.py` – main Python script that runs the full RAG pipeline: sets up the system prompt, retrieves information from the vector database, configures LLM hyperparameters, and sends the query to the Bielik model server.  
-  - `Requirements.txt` – list of Python dependencies for the RAG module.
-
-- **images/**  
-  Directory with image files used in the “Usage Example” section.
+---
 
 ## Contact
-This project is released under an open-source license. Anyone interested in collaborating on a tool for streamlined tax regulation review is welcome to get in touch:  
-- LinkedIn: [michał-jaros-88572821a](https://www.linkedin.com/in/michał-jaros-88572821a/)  
-- E-mail: michal.marek.jaros@gmail.com  
 
+Open source project.  
+Feel free to collaborate:  
+- [LinkedIn: Michał Jaros](https://www.linkedin.com/in/michał-jaros-88572821a/)  
+- E-mail: michal.marek.jaros@gmail.com  

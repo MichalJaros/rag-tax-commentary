@@ -61,6 +61,7 @@ Obecna wersja **nie posiada interfejsu webowego** – pytania zadawane są w ter
     python pipeline.py -q "Czy można zaliczyć pensje inżynierów do ulgi na działalność badawczo-rozwojową?"
     ```
   (images/image1.png)
+  
     Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_log.csv`).
 
 4. **Po zadaniu serii pytań** możesz wygenerować statystyki, ranking chunków i automatyczne raporty do README:
@@ -94,7 +95,7 @@ Obecna wersja **nie posiada interfejsu webowego** – pytania zadawane są w ter
 ## Struktura repozytorium
 
 Ze względu na ograniczenia dotyczące rozmiaru plików na GitHub, repozytorium nie zawiera bazy wektorowej ani pliku CSV z tekstami interpretacji.
-```
+
 repo_root/
 │
 ├── [bielik_aws_deploy/](bielik_aws_deploy/)
@@ -121,7 +122,7 @@ repo_root/
 │   ├── [image3.png](images/image3.png)
 │
 └── [README.md](README.md)---
-```
+
 ## Kontakt
 
 Projekt na licencji otwartej.  

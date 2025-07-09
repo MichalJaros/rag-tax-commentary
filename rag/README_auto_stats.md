@@ -7,9 +7,6 @@
 - **Max długość chunku:** 500
 - **Liczba chunków w bazie Weaviate:** 96534
 
-## Rozkład długości chunków
-![Histogram chunków](docs_imgs/chunk_length_hist.png)
-
 ## Pipeline
 
 ```mermaid

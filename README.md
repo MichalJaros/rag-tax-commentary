@@ -39,12 +39,12 @@ Celem projektu jest stworzenie narzędzia, które na podstawie interpretacji pod
 - **Docker** — uruchamianie serwera embeddingowego i bazy Weaviate
 
 **Pliki:**
-- [csv_document_loader.py](Rag/csv_document_loader.py) — ładowanie i chunkowanie danych CSV
-- [weaviate_ingest.py](Rag/weaviate_ingest.py) — indeksowanie dokumentów, zarządzanie schematem i połączenie z bazą Weaviate
-- [retriever.py](Rag/retriever.py) — retriever oparty na LangChain (wyszukiwanie najbardziej relewantnych fragmentów)
-- [llms.py](Rag/llms.py) — komunikacja i budowa promptów dla Bielik LLM
-- [pipeline.py](Rag/pipeline.py) — główny pipeline RAG (terminal)
-- [generate_stats.py](Rag/generate_stats.py) — automatyczna analiza, zbieranie statystyk i generowanie raportów/wykresów na podstawie realnych pytań
+- [csv_document_loader.py](rag/csv_document_loader.py) — ładowanie i chunkowanie danych CSV
+- [weaviate_ingest.py](rag/weaviate_ingest.py) — indeksowanie dokumentów, zarządzanie schematem i połączenie z bazą Weaviate
+- [retriever.py](rag/retriever.py) — retriever oparty na LangChain (wyszukiwanie najbardziej relewantnych fragmentów)
+- [llms.py](rag/llms.py) — komunikacja i budowa promptów dla Bielik LLM
+- [pipeline.py](rag/pipeline.py) — główny pipeline RAG (terminal)
+- [generate_stats.py](rag/generate_stats.py) — automatyczna analiza, zbieranie statystyk i generowanie raportów/wykresów na podstawie realnych pytań
 
 ---
 
@@ -78,7 +78,7 @@ Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_l
 ## Automatyczna analiza statystyk i raportowanie
 
 - **System loguje każde pytanie i odpowiedź** do pliku `qa_history_log.csv`
-- **[generate_stats.py](Rag/generate_stats.py)** analizuje rzeczywistą historię zapytań:
+- **[generate_stats.py](rag/generate_stats.py)** analizuje rzeczywistą historię zapytań:
     - Liczbę i długość chunków
     - Ranking najczęściej przywoływanych fragmentów
     - Czasy odpowiedzi
@@ -86,9 +86,9 @@ Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_l
     - Gotowe raporty Markdown do README lub prezentacji
 
 **Przykładowe raporty/statystyki znajdziesz w plikach:**
-- [retrieval_report.md](Rag/retrieval_report.md)
-- [retrieval_stats_summary.md](Rag/retrieval_stats_summary.md)
-- [chunk_ranking.csv](Rag/chunk_ranking.csv)
+- [retrieval_report.md](rag/retrieval_report.md)
+- [retrieval_stats_summary.md](rag/retrieval_stats_summary.md)
+- [chunk_ranking.csv](rRg/chunk_ranking.csv)
 - (oraz obrazy PNG z wykresami)
 
 ---
@@ -96,7 +96,7 @@ Odpowiedź pojawi się w terminalu oraz zostanie zapisana do logu (`qa_history_l
 ## Struktura repozytorium
 
 Ze względu na ograniczenia dotyczące rozmiaru plików na GitHub, repozytorium nie zawiera bazy wektorowej ani pliku CSV z tekstami interpretacji.
-
+```
 repo_root/
 │
 ├── [bielik_aws_deploy/](bielik_aws_deploy/)
@@ -123,7 +123,7 @@ repo_root/
 │   ├── [image3.png](images/image3.png)
 │
 └── [README.md](README.md)---
-
+```
 ## Kontakt
 
 Projekt na licencji otwartej.  
